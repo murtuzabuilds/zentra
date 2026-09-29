@@ -1,0 +1,17 @@
+{
+  "$description": "Zentra design tokens, from the Zentra case study (W3C design-tokens format).",
+  "color": {
+    "lavender": { "$type": "color", "$value": "#CEA8FB", "$description": "Primary, focus ring, rewards" },
+    "butter":   { "$type": "color", "$value": "#FFECBA", "$description": "Streaks, warmth" },
+    "blush":    { "$type": "color", "$value": "#EBD7E4", "$description": "Soft surfaces" },
+    "sky":      { "$type": "color", "$value": "#DCEBFB", "$description": "Calm surfaces, study plans" },
+    "ink":      { "$type": "color", "$value": "#000000" },
+    "white":    { "$type": "color", "$value": "#FFFFFF" }
+  },
+  "font": {
+    "family": { "$type": "fontFamily", "$value": ["Urbanist", "system-ui", "sans-serif"] },
+    "heading": { "$type": "typography", "$value": { "fontSize": "32px", "fontWeight": 700 } },
+    "title":   { "$type": "typography", "$value": { "fontSize": "24px", "fontWeight": 600 } },
+    "body":    { "$type": "typography", "$value": { "fontSize": "16px", "fontWeight": 400 } }
+  }
+}
