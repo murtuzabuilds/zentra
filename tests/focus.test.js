@@ -30,3 +30,21 @@ test('badges unlock from stats', () => {
   const got = BADGES.filter(b => b.test({ sessions: 2, cleanSessions: 1, streak: 3, minutes: 50, xp: 120 })).map(b => b.id);
   assert.deepEqual(got, ['first', 'clean', 'streak3']);
 });
+import { recommend, nudge } from '../src/focus.js';
+const S = (distractions, done = true) => ({ distractions, done });
+test('the plan recommendation follows the last five sessions', () => {
+  assert.equal(recommend([]).reason, 'new');
+  assert.equal(recommend([S(0), S(1)]).plan, 'deep');
+  assert.deepEqual(recommend([S(0), S(1), S(0), S(0), S(0)]), { plan: 'deep', reason: 'steady', of: 5, drifted: 1, finished: 5 });
+  assert.equal(recommend([S(1), S(2), S(0), S(1), S(0)]).plan, 'sprint');
+  assert.equal(recommend([S(0, false), S(0, false), S(0, false), S(0), S(0)]).plan, 'sprint');
+  assert.equal(recommend([S(0), S(0), S(0), S(0), S(0)]).plan, 'study');
+  assert.equal(recommend([S(3), S(3), S(3), S(0), S(0), S(0), S(0), S(0)]).plan, 'study', 'only the last five count');
+  for (const r of [recommend([]), recommend([S(1), S(1), S(1)]), recommend([S(0), S(0), S(0), S(0), S(0)])]) assert.ok(PLANS.some(p => p.id === r.plan));
+});
+test('the smart reminder matches today\'s progress and stops at the goal', () => {
+  assert.equal(nudge({ doneToday: 0, goal: 3, streak: 4 }).kind, 'streak');
+  assert.equal(nudge({ doneToday: 0, goal: 3, streak: 0 }).kind, 'start');
+  assert.deepEqual(nudge({ doneToday: 1, goal: 3, streak: 4, focus: 25 }), { kind: 'left', streak: 4, left: 2, focus: 25 });
+  assert.equal(nudge({ doneToday: 3, goal: 3, streak: 4 }), null);
+});

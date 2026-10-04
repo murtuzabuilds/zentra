@@ -55,3 +55,29 @@ h2{font-size:var(--t);font-weight:600;margin:2px 0}h3{font-size:18px;font-weight
 .fine{margin-top:26px;font-size:14px;color:var(--ink2)}.fine a{color:var(--ink)}
 @media(max-width:900px){.wrap{grid-template-columns:1fr;padding:0}.phone{width:100%;height:100dvh;border:0;border-radius:0}.side{padding:24px}.status,.homebar{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+/* ---------- aligned to the case study boards: real lockup, weekday strip, focus goal card, stats card ---------- */
+.lockup{display:block;height:16px;width:auto}.lockup.big{height:30px}
+.date{margin:10px 0 0;font-size:13px;color:var(--ink2)}
+h1{margin:2px 0 12px}
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+.week span{border-radius:14px;padding:7px 0 8px;text-align:center;background:#EBD7E4;opacity:.75}
+.week span:nth-child(1){background:#CEA8FB}.week span:nth-child(2){background:#D9EBFC}.week span:nth-child(4){background:#D6EBD9}.week span:nth-child(5){background:#FFECBA}
+.week span.on{opacity:1;box-shadow:inset 0 0 0 1.5px #000}
+.week small{display:block;font-size:10px;font-weight:600;letter-spacing:.04em}.week b{font-size:18px;font-weight:500}
+.plan{display:block;background:#DFC8FD;border-radius:26px;padding:16px;margin-top:0;box-shadow:none}
+.goal-h{display:flex;align-items:center;gap:10px}.goal-h>div{flex:1;min-width:0}
+.goal-h .k{font-size:16px;font-weight:700;color:#000;letter-spacing:0;text-transform:none}.goal-h h2{margin:0;font-size:16px;font-weight:700}
+.goal-h .cnt{font-size:14px;font-weight:600}
+.tgt{width:34px;height:34px;flex:none;border-radius:50%;border:3px solid #000;box-shadow:inset 0 0 0 4px #DFC8FD,inset 0 0 0 7px #000}
+.plan p{margin:8px 0 8px;font-size:13.5px;color:#2b2140}
+.gbar{height:6px;border-radius:99px;background:rgba(255,255,255,.7);overflow:hidden}.gbar i{display:block;height:100%;width:0;background:#000;border-radius:99px;transition:width .4s}
+.plan .why{background:rgba(255,255,255,.55);border-radius:14px;padding:8px 10px;font-size:12.5px;line-height:1.35;margin:10px 0}
+.plan .why button{border:0;background:#000;color:#fff;border-radius:99px;padding:3px 10px;font:600 12px var(--font);margin-left:4px}
+.plan .cta{display:block;width:100%;padding:13px 20px;background:#1c1c1c}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);background:#D9EBFC;border-radius:26px;padding:14px 8px;margin-top:12px;text-align:center}
+.stats small{display:block;font-size:12.5px;color:#22303f}.stats b{display:block;font-size:15px;font-weight:600}
+.stats .ic{display:block;width:26px;height:26px;margin:6px auto}
+.stats .coin{border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE9A8,#F5B93A 60%,#D9932A);box-shadow:0 3px 0 #D9932A}
+.stats .flame{height:28px;width:22px}
+.stats .medal{border-radius:50%;background:radial-gradient(circle,#FFD34D 0 34%,#F26B3A 36% 100%);box-shadow:0 0 0 3px #F9C6B0}

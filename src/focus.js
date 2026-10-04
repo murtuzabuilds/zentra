@@ -53,3 +53,24 @@ export const BADGES = [
   { id: 'hour', name: 'Hour of focus', test: st => st.minutes >= 60 },
   { id: 'level3', name: 'Level 3', test: st => level(st.xp).level >= 3 },
 ];
+
+// Plan recommendation: a rule over the last five sessions, no model involved.
+// recent = [{ distractions: number, done: boolean }], oldest first.
+export function recommend(recent = []) {
+  const last = recent.slice(-5), of = last.length;
+  const drifted = last.filter(s => s.distractions > 0).length;
+  const finished = last.filter(s => s.done).length;
+  const base = { of, drifted, finished };
+  if (of < 3) return { plan: 'deep', reason: 'new', ...base };
+  if (drifted >= 3 || of - finished >= 3) return { plan: 'sprint', reason: 'drift', ...base };
+  if (drifted === 0 && finished === of && of === 5) return { plan: 'study', reason: 'clean', ...base };
+  return { plan: 'deep', reason: 'steady', ...base };
+}
+
+// Smart reminder: which nudge fits today's progress. Returns null once the goal is met.
+export function nudge({ doneToday = 0, goal = 3, streak = 0, focus = 25 } = {}) {
+  if (doneToday >= goal) return null;
+  if (doneToday === 0 && streak > 0) return { kind: 'streak', streak, left: goal, focus };
+  if (doneToday === 0) return { kind: 'start', streak: 0, left: goal, focus };
+  return { kind: 'left', streak, left: goal - doneToday, focus };
+}

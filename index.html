@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#F6F0FF">
 <title>Zentra · your dopamine-smart focus buddy (coded prototype)</title>
 <meta name="description" content="Coded prototype of Zentra: focus plans, streaks, rewards and real distraction detection.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens/tokens.css">
@@ -19,13 +20,22 @@
     <div class="status" aria-hidden="true"><b>9:41</b><span class="island"></span><span>●●●</span></div>
 
     <div class="screen" id="home">
-      <div class="bar"><span class="logo"><svg viewBox="0 0 64 40" width="30" height="19" aria-hidden="true"><path d="M8 2 H34 A18 18 0 0 1 17 20 H2 Z" fill="currentColor"/><path d="M36 2 H58 L54 20 H22 A18 18 0 0 0 36 2 Z" fill="currentColor"/><path d="M28 20 A18 18 0 0 0 10 38 H6 L10 20 Z M42 20 A18 18 0 0 1 60 38 H26 A18 18 0 0 1 42 20 Z" fill="currentColor" opacity=".55"/></svg><b>zentra</b></span><button type="button" class="pill" data-go="rewards" id="xpPill">Lv 1 · 0 XP</button></div>
+      <div class="bar"><img class="lockup" src="assets/zentra-lockup.svg" alt="zentra" width="114" height="16"><button type="button" class="pill" data-go="rewards" id="xpPill">Lv 1 · 0 XP</button></div>
+      <p class="date" id="dateLine"></p>
       <h1 id="greet">Ready to focus?</h1>
-      <div class="streak"><span class="flame" aria-hidden="true"></span><div><b id="streakN">0-day streak</b><small id="streakTip">Finish one session today to start a streak</small></div></div>
+      <div class="week" id="week" aria-hidden="true"></div>
       <article class="plan" id="planCard">
-        <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="tr"/><circle cx="60" cy="60" r="50" class="fl" id="dayRing"/></svg><span class="rl"><b id="dayCount">0/3</b><small id="dayRemain">Remain 3</small></span></div>
-        <div><small class="k">Today's plan</small><h2 id="planName">Deep work</h2><p id="planMeta">3 × 25 min focus · 5 min rest</p><button type="button" class="cta" data-go="focus">Start focus</button></div>
+        <div class="goal-h"><span class="tgt" aria-hidden="true"></span><div><small class="k">Today's Focus Goal:</small><h2 id="planName">Deep work</h2></div><b class="cnt" id="dayCount">0/3</b></div>
+        <p id="planMeta">3 × 25 min focus · 5 min rest</p>
+        <div class="gbar"><i id="dayBar"></i></div>
+        <p class="why" id="planWhy"></p>
+        <button type="button" class="cta" data-go="focus">Start Focus Session</button>
       </article>
+      <div class="stats">
+        <div><small>Zentra XP</small><span class="ic coin" aria-hidden="true"></span><b id="xpN">0</b></div>
+        <div><small>Streaks</small><span class="ic flame" aria-hidden="true"></span><b id="streakN">0 days</b></div>
+        <div><small>Challenge</small><span class="ic medal" aria-hidden="true"></span><b id="challN">0/7 days</b></div>
+      </div>
       <h3>Pick a plan</h3>
       <div class="plans" id="plans"></div>
       <div class="mascot-row"><div class="mascot" id="mascot" aria-hidden="true"><i></i><i></i><em></em></div><p id="mascotSay">Hi! I'm Zee. Small sessions, every day. That's the whole trick.</p></div>
@@ -57,7 +67,7 @@
   </section>
 
   <aside class="side">
-    <span class="logo big"><svg viewBox="0 0 64 40" width="30" height="19" aria-hidden="true"><path d="M8 2 H34 A18 18 0 0 1 17 20 H2 Z" fill="currentColor"/><path d="M36 2 H58 L54 20 H22 A18 18 0 0 0 36 2 Z" fill="currentColor"/><path d="M28 20 A18 18 0 0 0 10 38 H6 L10 20 Z M42 20 A18 18 0 0 1 60 38 H26 A18 18 0 0 1 42 20 Z" fill="currentColor" opacity=".55"/></svg><b>zentra</b></span>
+    <img class="lockup big" src="assets/zentra-lockup.svg" alt="zentra" width="213" height="30">
     <p class="lede">Your dopamine-smart focus buddy. Built for Gen Z attention: short plans, streaks, rewards, and a nudge the moment you drift.</p>
     <div class="widget"><small>FOCUS SESSION ↗</small><div class="wring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" class="tr"/><circle cx="50" cy="50" r="40" class="fl" id="wRing"/></svg><span class="rl"><b id="wCount">0/3</b><small id="wRemain">Remain 3</small></span></div><em>Home widget</em></div>
     <ul class="facts">

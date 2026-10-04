@@ -1,4 +1,4 @@
-import { PLANS, newSession, tick, distract, resume, remaining, xpFor, level, streak, BADGES } from './src/focus.js';
+import { PLANS, newSession, tick, distract, resume, remaining, xpFor, level, streak, BADGES, recommend, nudge } from './src/focus.js';
 
 const $ = id => document.getElementById(id);
 const KEY = 'zentra.v1', today = () => new Date().toISOString().slice(0, 10);
@@ -17,12 +17,21 @@ function render() {
   const p = plan(), n = Math.min(doneToday(), p.sessions), st = streak(S.days, today()), lv = level(S.xp);
   $('xpPill').textContent = `Lv ${lv.level} · ${S.xp} XP`;
   $('greet').textContent = n >= p.sessions ? 'Plan complete. Legend.' : n ? 'Keep the chain going.' : 'Ready to focus?';
-  $('streakN').textContent = `${st}-day streak`;
-  $('streakTip').textContent = st ? (n ? 'Streak safe for today' : 'One session today keeps it alive') : 'Finish one session today to start a streak';
-  $('dayCount').textContent = $('wCount').textContent = `${n}/${p.sessions}`;
-  $('dayRemain').textContent = $('wRemain').textContent = `Remain ${p.sessions - n}`;
-  ringSet($('dayRing'), n / p.sessions, 50); ringSet($('wRing'), n / p.sessions, 40);
-  $('planName').textContent = p.name; $('planMeta').textContent = `${p.sessions} × ${p.focus} min focus · ${p.rest} min rest`;
+  const dt = new Date();
+  $('dateLine').textContent = dt.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + dt.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+  $('week').innerHTML = [-1, 0, 1, 2, 3].map(o => { const d = new Date(Date.now() + o * 864e5); return `<span class="${o === 0 ? 'on' : ''}"><small>${d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}</small><b>${d.getDate()}</b></span>`; }).join('');
+  $('xpN').textContent = S.xp.toLocaleString('en-US');
+  $('streakN').textContent = `${st} day${st === 1 ? '' : 's'}`;
+  $('challN').textContent = `${Math.min(st, 7)}/7 days`;
+  $('dayCount').textContent = `${n}/${p.sessions}`; $('wCount').textContent = `${n}/${p.sessions}`;
+  $('wRemain').textContent = `Remain ${p.sessions - n}`;
+  $('dayBar').style.width = `${100 * n / p.sessions}%`; ringSet($('wRing'), n / p.sessions, 40);
+  $('planName').textContent = p.name; $('planMeta').textContent = `Complete ${p.sessions} sessions to stay on track · ${p.focus} min focus, ${p.rest} min rest`;
+  /* plan suggestion: a rule over the last five sessions (src/focus.js), with its reason shown */
+  const rec = recommend(S.recent || []), rp = PLANS.find(x => x.id === rec.plan);
+  const WHY = { new: 'Start here while Zentra learns your rhythm.', drift: `You drifted or stopped early in ${Math.max(rec.drifted, rec.of - rec.finished)} of your last ${rec.of} sessions, so shorter blocks fit better.`, clean: `Your last ${rec.of} sessions were clean, so you can hold a longer block.`, steady: 'Your recent sessions are steady, so this length fits.' };
+  $('planWhy').innerHTML = rec.plan === S.plan ? `<b>Suggested for you.</b> ${WHY[rec.reason]}` : `<b>Suggestion: ${rp.name}.</b> ${WHY[rec.reason]} <button type="button" data-plan="${rp.id}">Switch</button>`;
+  if (!session) { const nd = nudge({ doneToday: n, goal: p.sessions, streak: st, focus: p.focus }); if (nd && !$('mascot').className.includes('party')) $('mascotSay').textContent = nd.kind === 'streak' ? `Your ${nd.streak}-day streak is waiting. One ${nd.focus} minute session keeps it alive.` : nd.kind === 'start' ? `One ${nd.focus} minute session today starts a streak.` : `${nd.left} to go today. The next ${nd.focus} minutes are the easy part.`; }
   $('plans').innerHTML = PLANS.map(x => `<button type="button" data-plan="${x.id}" class="${x.id === S.plan ? 'on' : ''}" style="--c:${x.color}"><b>${x.name}</b><small>${x.focus}/${x.rest} min × ${x.sessions}</small></button>`).join('');
   $('fPlan').textContent = p.name; $('fIdx').textContent = `${Math.min(n + 1, p.sessions)}/${p.sessions}`;
   $('lvl').textContent = lv.level; $('lvfill').style.width = `${100 * lv.into / lv.need}%`; $('lvtxt').textContent = `${lv.into} / ${lv.need} XP to level ${lv.level + 1}`;
@@ -33,7 +42,7 @@ function render() {
   $('chall').innerHTML = ch.map(([t, v, goal]) => `<li><b><span>${t}</span><span>${Math.min(v, goal)}/${goal}</span></b><div class="bar2"><i style="width:${100 * Math.min(1, v / goal)}%"></i></div></li>`).join('');
   if (!session) drawClock(p.focus * 60000, 0);
 }
-$('plans').addEventListener('click', e => { const b = e.target.closest('[data-plan]'); if (!b || session) return; S.plan = b.dataset.plan; save(); render(); });
+for (const id of ['plans', 'planWhy']) $(id).addEventListener('click', e => { const b = e.target.closest('[data-plan]'); if (!b || session) return; S.plan = b.dataset.plan; save(); render(); });
 
 /* ---------- focus session ---------- */
 const speed = () => ($('fast').checked ? 60 : 1);
@@ -66,6 +75,7 @@ function finish(complete) {
     S.log[today()] = doneToday() + 1; if (!S.days.includes(today())) S.days.push(today());
     S.sessions++; if (!session.distractions.length) S.clean++;
   }
+  S.recent = [...(S.recent || []), { distractions: session.distractions.length, done: complete }].slice(-5);
   const xp = xpFor(session, st); S.xp += xp; S.minutes += minutes; save();
   $('fState').textContent = complete ? `Done! +${xp} XP` : `Logged ${minutes} min · +${xp} XP`;
   $('startBtn').textContent = 'Start';
@@ -91,5 +101,5 @@ $('logEnd').addEventListener('click', () => { $('modal').hidden = true; finish(f
 $('reset').addEventListener('click', () => { S = { plan: 'deep', xp: 0, days: [], log: {}, sessions: 0, clean: 0, minutes: 0 }; save(); render(); });
 
 /* first visit: seed a believable history so streaks and badges have something to show */
-if (!load()) { const d = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10); S.days = [d(3), d(2), d(1)]; S.log = { [d(3)]: 3, [d(2)]: 2, [d(1)]: 3 }; S.sessions = 8; S.clean = 5; S.minutes = 200; S.xp = 186; save(); }
+if (!load()) { const d = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10); S.days = [d(3), d(2), d(1)]; S.log = { [d(3)]: 3, [d(2)]: 2, [d(1)]: 3 }; S.sessions = 8; S.clean = 5; S.minutes = 200; S.xp = 186; S.recent = [{ distractions: 0, done: true }, { distractions: 1, done: true }, { distractions: 0, done: true }, { distractions: 0, done: true }]; save(); }
 render();
