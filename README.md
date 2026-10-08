@@ -46,6 +46,17 @@ Logging a partial session still earns XP for the minutes you did. Short is fine;
 
 ![Rewards](docs/rewards.png)
 
+## More screens
+
+| | |
+|---|---|
+| ![Focus session](docs/focus.webp) |  |
+| Focus session |  |
+
+<img src="docs/phone.webp" width="300" alt="Home on a phone">
+
+Home on a phone.
+
 ## Run it
 
 ```bash
