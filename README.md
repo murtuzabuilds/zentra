@@ -2,7 +2,7 @@
 
 **Your dopamine-smart focus buddy.** A focus app designed for Gen Z attention: short focus plans, streaks, rewards, and a nudge the moment you drift. This repo is the coded, clickable prototype of the Zentra UX/UI case study, built on the case study's brand and design tokens.
 
-**[Open the coded prototype →](https://murtuzabuilds.github.io/zentra/)** &nbsp;·&nbsp; **[Figma prototype ↗](https://www.figma.com/proto/QCwAM425MJNSONRtJzkJIb/Zentra-Mobile-App-Design?content-scaling=fixed&kind=proto&node-id=379-338&page-id=0%3A1&scaling=scale-down&starting-point-node-id=371%3A5)**
+**[Open the coded prototype →](https://murtuzabuilds.com/zentra/)** &nbsp;·&nbsp; **[Figma prototype ↗](https://www.figma.com/proto/QCwAM425MJNSONRtJzkJIb/Zentra-Mobile-App-Design?content-scaling=fixed&kind=proto&node-id=379-338&page-id=0%3A1&scaling=scale-down&starting-point-node-id=371%3A5)**
 
 ![Zentra home](docs/home.png)
 
